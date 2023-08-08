@@ -24,7 +24,7 @@ void setup() {
   qtr.setEmitterPin(2);
 
   delay(500);
-  for (uint16_t i = 0; i < 400; i++)
+  for (uint16_t i = 0; i < 200; i++)
   {
     qtr.calibrate();
   }
