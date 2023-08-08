@@ -7,7 +7,7 @@ Reposiroty for SPU Tracking Robot Contest 2023 Project
 
 ### Working Station
 - [x] 👼Started researching equipment and systems
-- [ ] 🛣 PID and QTRsensors learning
+- [x] 🛣 PID and QTRsensors learning
 - [ ] 🚗 Make Robot car with 3d printer
 - [ ] 💻 Test coding in our robot car
 - [ ] ♨️ Hot Run Test on line tracking
