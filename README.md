@@ -1,7 +1,7 @@
 # 🔴 SPU Tracking Robot 🔴
 Reposiroty for SPU Tracking Robot Contest 2023 Project
 <p align="center">
-  <img height="300" src="http://www.krumon-robot.com/product/31/16ga-r10-2500rpm">
+  <img height="300" src="Screenshot 2023-08-08 235747.png">
 </p>
 
 
