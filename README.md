@@ -1,7 +1,7 @@
 # 🔴 SPU Tracking Robot 🔴
 Reposiroty for SPU Tracking Robot Contest 2023 Project
 <p align="center">
-  <img height="300" src="https://scontent.fbkk28-1.fna.fbcdn.net/v/t39.30808-6/354067310_7122420124451160_5920428400530205965_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5cd70e&_nc_eui2=AeGkyPe5SH76GxaQiR88AwfNsIvKS1yEIoSwi8pLXIQihMZot1AY1m8HDCXTQVd6fjRrloij0Epw6LS57DicpZTU&_nc_ohc=Ht-mkF59ViYAX_ka-L0&_nc_ht=scontent.fbkk28-1.fna&oh=00_AfAKOGhGXzGN4VL7M3asDwDYKX46rxmx0QeFaglHkSt3wA&oe=64946711">
+  <img height="300" src="http://www.krumon-robot.com/product/31/16ga-r10-2500rpm">
 </p>
 
 
