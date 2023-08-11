@@ -19,9 +19,8 @@ int CH;
 
 void Beep()
 {
-  digitalWrite(4, HIGH);
+  tone(4,100,100);
   delay(100);
-  digitalWrite(4, LOW);
 }
 
 void motor(int PWA, int PWB, int MAA1, int MAA2, int MBB1, int MBB2)

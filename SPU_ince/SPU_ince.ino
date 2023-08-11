@@ -6,6 +6,19 @@ QTRSensors qtr;
 
 const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
+// PID constants
+double Kp = 0.5;  // คือส่วนที่ควบคุมตามความคลาดเคลื่อนของตำแหน่งปัจจุบันกับเป้าหมาย 
+double Ki = 0.1;  // ส่วนนี้ควบคุมความคลาดเคลื่อนที่สะสมมานาน
+double Kd = 0.3;  // ส่วนนี้ควบคุมตามความเร็วในการเปลี่ยนแปลงของความคลาดเคลื่อน
+
+// PID variables
+float error = 0;
+float lastError = 0;
+float integral = 0;
+float derivative = 0;
+
+// Desired position should be the center of your sensors.
+const uint16_t DesiredPosition = SensorCount * 1000 / 2;  // assuming each sensor can have a max value of 1000
 
 void setup() {
   pinMode(7, OUTPUT);
@@ -19,6 +32,8 @@ void setup() {
   pinMode(13, OUTPUT);  //Motor B1
   pinMode(8, OUTPUT);   //Motor B2
   pinMode(11, OUTPUT);  //Speed PWM Motor B
+
+  pinMode(9,INPUT);
 
   pinMode(4, OUTPUT);
   // configure the sensors
@@ -36,16 +51,32 @@ void setup() {
     callibrated();  // Call the calibration function if loading fails
   }
   callibrated();
+  Beep();
 }
 
 void loop() {
-  // อ่านค่าเซ็นเซอร์ที่ปรับเทียบแล้วและรับการวัดตำแหน่งเส้น
-  // ตั้งแต่ 0 ถึง 5,000 (สำหรับเส้นสีขาว ให้ใช้ readLineWhite() แทน)
+
+  while (digitalRead(9) == 0) {
+    if (digitalRead(9) == 1) break; 
+  }
   uint16_t position = qtr.readLineBlack(sensorValues);
 
-  // พิมพ์ค่าเซ็นเซอร์เป็นตัวเลขตั้งแต่ 0 ถึง 1,000 โดยที่ 0 หมายถึงสูงสุด
-  // การสะท้อนแสง และ 1,000 หมายถึงการสะท้อนแสงขั้นต่ำ ตามด้วยเส้น
-  // ตำแหน่ง
+  // Compute PID
+  error = DesiredPosition - position;
+  integral += error;
+  derivative = error - lastError;
+  float speedDifference = Kp * error + Ki * integral + Kd * derivative;
+
+  // Set motor speeds
+  int leftSpeed = 255;  // Default speed for left motor
+  int rightSpeed = 255; // Default speed for right motor
+  leftSpeed += speedDifference;
+  rightSpeed -= speedDifference;
+
+  setMotorSpeed(leftSpeed, rightSpeed);
+
+  lastError = error;
+
   for (uint8_t i = 0; i < SensorCount; i++) {
     Serial.print(sensorValues[i]);
     Serial.print('\t');
@@ -56,9 +87,12 @@ void loop() {
 }
 
 void setMotorSpeed(int left, int right) {
+  // Limit speed values between 0 and 255
+  left = constrain(left, 0, 255);
+  right = constrain(right, 0, 255);
+
   motor(left, right, 1, 0, 1, 0);
 }
-
 void saveCalibrationToEEPROM() {
   for (uint8_t i = 0; i < SensorCount; i++) {
     EEPROM.put(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]);
@@ -74,6 +108,11 @@ bool loadCalibrationFromEEPROM() {
     EEPROM.get((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i]);
     Serial.println(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]);
     Serial.println((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i]);
+
+    if ((EEPROM.get(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]) == NULL) || (EEPROM.get((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i])) == NULL) {
+      return 0;
+      break;
+    }
   }
   return true;
 }
