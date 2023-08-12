@@ -1,4 +1,5 @@
 #include "Handle/motor.h"
+#include "Handle/PID.h" as PID
 #include <QTRSensors.h>
 #include <MotorDriver.h>
 #include <EEPROM.h>
@@ -59,31 +60,7 @@ void loop() {
   while (digitalRead(9) == 0) {
     if (digitalRead(9) == 1) break; 
   }
-  uint16_t position = qtr.readLineBlack(sensorValues);
-
-  // Compute PID
-  error = DesiredPosition - position;
-  integral += error;
-  derivative = error - lastError;
-  float speedDifference = Kp * error + Ki * integral + Kd * derivative;
-
-  // Set motor speeds
-  int leftSpeed = 255;  // Default speed for left motor
-  int rightSpeed = 255; // Default speed for right motor
-  leftSpeed += speedDifference;
-  rightSpeed -= speedDifference;
-
-  setMotorSpeed(leftSpeed, rightSpeed);
-
-  lastError = error;
-
-  for (uint8_t i = 0; i < SensorCount; i++) {
-    Serial.print(sensorValues[i]);
-    Serial.print('\t');
-  }
-  Serial.println(position);
-
-  delay(250);
+  Tl();
 }
 
 void setMotorSpeed(int left, int right) {
