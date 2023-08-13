@@ -1,23 +1,23 @@
 #include "Handle/motor.h"
-#include "Handle/PID.h" as PID
+#include "Handle/PID.h"
 #include <QTRSensors.h>
-#include <MotorDriver.h>
 #include <EEPROM.h>
 QTRSensors qtr;
 
+#define BaseSpeed 255
+
 const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
-// PID constants
-double Kp = 0.5;  // คือส่วนที่ควบคุมตามความคลาดเคลื่อนของตำแหน่งปัจจุบันกับเป้าหมาย 
-double Ki = 0.1;  // ส่วนนี้ควบคุมความคลาดเคลื่อนที่สะสมมานาน
-double Kd = 0.3;  // ส่วนนี้ควบคุมตามความเร็วในการเปลี่ยนแปลงของความคลาดเคลื่อน
 
-// PID variables
-float error = 0;
-float lastError = 0;
-float integral = 0;
-float derivative = 0;
+// PID coefficients
+const float Kp = 0.2;  // Proportional coefficient
+const float Ki = 0.01; // Integral coefficient
+const float Kd = 1;    // Derivative coefficient
 
+float Error = 0;
+float LastError = 0;
+float Integral = 0;
+float Derivative = 0;
 // Desired position should be the center of your sensors.
 const uint16_t DesiredPosition = SensorCount * 1000 / 2;  // assuming each sensor can have a max value of 1000
 
@@ -34,12 +34,14 @@ void setup() {
   pinMode(8, OUTPUT);   //Motor B2
   pinMode(11, OUTPUT);  //Speed PWM Motor B
 
-  pinMode(9,INPUT);
+  pinMode(9, INPUT);
 
   pinMode(4, OUTPUT);
   // configure the sensors
   qtr.setTypeRC();
-  qtr.setSensorPins((const uint8_t[]){ A0, A1, A2, A3, A4, A5, 5, 3 }, SensorCount);
+  qtr.setSensorPins((const uint8_t[]) {
+    A0, A1, A2, A3, A4, A5, 5, 3
+  }, SensorCount);
   qtr.setEmitterPin(2);
   Beep();
 
@@ -55,12 +57,34 @@ void setup() {
   Beep();
 }
 
-void loop() {
+bool ch = false;
 
-  while (digitalRead(9) == 0) {
-    if (digitalRead(9) == 1) break; 
+void loop() {
+  if (digitalRead(9) == 1) {
+    ch = true;
   }
-  Tl();
+
+  if (ch == false) {
+    sensor_test();
+  } else {
+    delay(100);
+    uint16_t position = qtr.readLineBlack(sensorValues);
+
+    // ... [Rest of your existing code here]
+
+    Error = 3500 - position;  // 3500 is the center position for an 8 sensor array
+    Integral += Error;
+    Derivative = Error - LastError;
+
+    float PID_Value = (Kp * Error) + (Ki * Integral) + (Kd * Derivative);
+
+    // Adjust motor speed based on PID Value
+    motor(BaseSpeed - PID_Value, BaseSpeed + PID_Value,1,0,1,0);
+
+    LastError = Error;
+    
+  }
+
 }
 
 void setMotorSpeed(int left, int right) {
@@ -120,4 +144,22 @@ void callibrated() {
   Serial.println();
   saveCalibrationToEEPROM();
   delay(1000);
+}
+
+void sensor_test() {
+  // read calibrated sensor values and obtain a measure of the line position
+  // from 0 to 5000 (for a white line, use readLineWhite() instead)
+  uint16_t position = qtr.readLineBlack(sensorValues);
+
+  // print the sensor values as numbers from 0 to 1000, where 0 means maximum
+  // reflectance and 1000 means minimum reflectance, followed by the line
+  // position
+  for (uint8_t i = 0; i < SensorCount; i++)
+  {
+    Serial.print(sensorValues[i]);
+    Serial.print('\t');
+  }
+  Serial.println(position);
+
+  delay(250);
 }
