@@ -1,4 +1,5 @@
 #include "Handle/PID.h"
+
 #include <QTRSensors.h>
 #include <EEPROM.h>
 QTRSensors qtr;
@@ -94,12 +95,10 @@ void callibrated() {
   delay(1000);
 }
 
-
 void setup() {
   pinMode(7, OUTPUT);
   digitalWrite(7, HIGH);
   //Setup Channel A
-
 
   pinMode(9, INPUT);
 
@@ -179,5 +178,3 @@ void loop() {
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-

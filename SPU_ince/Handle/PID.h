@@ -120,7 +120,7 @@ void Tl()
   {
     error = 0;
   }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && BWsensorsValue[5]) &&W(sensorsValue[6]) &&W(sensorsValue[7]))
+  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(WsensorsValue[5]) &&W(sensorsValue[6]) &&W(sensorsValue[7]))
     {
       error = 0;
     }
