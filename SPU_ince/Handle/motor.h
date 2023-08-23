@@ -1,4 +1,3 @@
-#ifndef motor_h
 #define motor_h
 
 #include <Arduino.h> // นำเข้าไลบรารีสำหรับ Arduino
