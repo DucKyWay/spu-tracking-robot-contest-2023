@@ -23,8 +23,7 @@ void Beep() {
   digitalWrite(4, LOW);
 }
 
-void motor(int PWA, int PWB, int MAA1, int MAA2, int MBB1, int MBB2)
-{
+void motor(int PWA, int PWB, int MAA1, int MAA2, int MBB1, int MBB2) {
   analogWrite(M1, PWA);
   analogWrite(M2, PWB);
 
@@ -34,8 +33,7 @@ void motor(int PWA, int PWB, int MAA1, int MAA2, int MBB1, int MBB2)
   digitalWrite(MB2, MBB2);
 }
 
-void test_motor()
-{
+void test_motor() {
   for (value = 0; value <= VMX; value += 5)
   {
     motor(value, value, 1, 0, 1, 0);
@@ -62,16 +60,14 @@ void test_motor()
   delay(500);
 }
 
-void stop_motor()
-{
+void stop_motor() {
   motor(0, 0, 0, 0, 0, 0);
   delay(30);
 }
 
 /////////// Driving Zone //////////////
 
-void forward(int power)
-{
+void forward(int power) {
   if (CH == -1)
   {
     for (value = value; value >= 0; value -= 20)
@@ -90,8 +86,7 @@ void forward(int power)
   CH = 1;
 }
 
-void backward(int power)
-{
+void backward(int power) {
   if (CH == 1)
   {
 
