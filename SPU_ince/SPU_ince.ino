@@ -1,7 +1,7 @@
 #include "Handle/motor.h"
 
 #include <Arduino.h>
-#include <QTRSensors.h> 
+#include <QTRSensors.h>
 #include <EEPROM.h>
 
 QTRSensors qtr;
@@ -22,15 +22,15 @@ float Integral = 0;
 float Derivative = 0;
 
 // ตั้งค่าขาที่ใช้ในการควบคุม L298P Shield
-const int M1_1 = 10;  // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ A
-const int MA1_1 = 12; // ให้มอเตอร์หมุนไปด้านหน้า
-const int MA2_2 = 3;  // ให้มอเตอร์หมุนไปด้านหลัง
+const int M1_1 = 10;   // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ A
+const int MA1_1 = 12;  // ให้มอเตอร์หมุนไปด้านหน้า
+const int MA2_2 = 3;   // ให้มอเตอร์หมุนไปด้านหลัง
 
-const int M2_2 = 11;  // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ B
-const int MB1_1 = 13; // ให้มอเตอร์หมุนไปด้านหน้า
-const int MB2_2 = 8;  // ให้มอเตอร์หมุนไปด้านหลัง
+const int M2_2 = 11;   // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ B
+const int MB1_1 = 13;  // ให้มอเตอร์หมุนไปด้านหน้า
+const int MB2_2 = 8;   // ให้มอเตอร์หมุนไปด้านหลัง
 
-int* sensorsValue = new int[7]; // do not use 0 index
+int* sensorsValue = new int[7];  // do not use 0 index
 
 int lineV = 0;
 int groundV = 0;
@@ -72,10 +72,9 @@ void motor2(int PWA1, int PWB1, int MAA1_1, int MAA2_2, int MBB2_1, int MBB2_2) 
 /////////////////////////////////////////////////////////////////////////
 
 bool B(int n) {
-  if (n > 980) { // is black
+  if (n > 980) {  // is black
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -83,10 +82,9 @@ bool B(int n) {
 /////////////////////////////////////////////////////////////////////////
 
 bool W(int n) {
-  if (n <= 979) { // is white
+  if (n <= 979) {  // is white
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -102,56 +100,39 @@ void Tl() {
 
   if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 4;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 4;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 3;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 3;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 2;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 2;
-  }
-  else if (W(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 1;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
     error = 0;
-  }
-  else if (W(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
     error = 0;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = 0;
-  }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
-      error = 0;
-  }
-  else if (B(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+    error = 0;
+  } else if (B(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -4;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -4;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -3;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -3;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -2;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -2;
-  }
-  else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -1;
     /// check WWWWW
     if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4])) {
@@ -165,7 +146,7 @@ void Tl() {
     if (leftSpeed > maxSpeed) {
       leftSpeed = maxSpeed;
     }
-    if (rightSpeed > maxSpeed) { 
+    if (rightSpeed > maxSpeed) {
       rightSpeed = maxSpeed;
     }
     if (leftSpeed < -maxSpeed) {
@@ -174,7 +155,7 @@ void Tl() {
     if (rightSpeed < -maxSpeed) {
       rightSpeed = -maxSpeed;
     }
-      
+
     motor2(leftSpeed, rightSpeed, 1, 0, 1, 0);
 
     pre_error = error;
@@ -247,10 +228,8 @@ void setup() {
   qtr.setTypeRC();
   qtr.setSensorPins(
     (const uint8_t[]){
-      5,3,A5,A4,A3,A2,A1,A0
-    },
-    SensorCount
-  );
+      5, 3, A5, A4, A3, A2, A1, A0 },
+    SensorCount);
   qtr.setEmitterPin(2);
   Beep();
 
@@ -266,7 +245,7 @@ void setup() {
   Beep();
 }
 
-bool ch = false;
+bool ch = true;
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -276,11 +255,12 @@ void loop() {
   if (digitalRead(9) == 1) {
     ch = true;
   }
-
   if (ch == false) {
     sensor_test();
   } else {
     uint16_t position = qtr.readLineBlack(sensorValues);  //อ่านค่าเส้นสีดำให้เป็นเส้นที่ถูกตรวจสอบเป็นหลัก
+
+    Tl();
 
     Error = 3500 - position;  // 3500 is the center position for an 8 sensor array
     Integral += Error;
@@ -291,6 +271,5 @@ void loop() {
     LastError = Error;
 
     // ตรวจสอบว่าถึงเวลาตรวจสอบยัง
-    
   }
 }

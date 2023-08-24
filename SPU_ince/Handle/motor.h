@@ -36,28 +36,28 @@ void motor(int PWA, int PWB, int MAA1, int MAA2, int MBB1, int MBB2) {
 void test_motor() {
   for (value = 0; value <= VMX; value += 5)
   {
-    motor(value, value, 1, 0, 1, 0);
+    motor(value, value, 1, LOW, 1, LOW);
     delay(30);
   }
   delay(3000);
   for (value = VMX; value >= 0; value -= 5)
   {
-    motor(value, value, 1, 0, 1, 0);
+    motor(value, value, 1, LOW, 1, LOW);
     delay(30);
   }
-  delay(500);
+  delay(1000);
   for (value = 0; value <= VMX; value += 5)
   {
-    motor(value, value, 0, 1, 0, 1);
+    motor(value, value, LOW, 1, LOW, 1);
     delay(30);
   }
   delay(3000);
   for (value = VMX; value >= 0; value -= 5)
   {
-    motor(value, value, 0, 1, 0, 1);
+    motor(value, value, LOW, 1, LOW, 1);
     delay(30);
   }
-  delay(500);
+  delay(1000);
 }
 
 void stop_motor() {
