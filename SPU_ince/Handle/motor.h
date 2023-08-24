@@ -1,3 +1,4 @@
+#ifndef motor_h
 #define motor_h
 
 #include <Arduino.h> // นำเข้าไลบรารีสำหรับ Arduino
@@ -16,8 +17,7 @@ const int VMX = 255;
 int value;
 int CH;
 
-void Beep()
-{
+void Beep() {
   digitalWrite(4, HIGH);
   delay(100);
   digitalWrite(4, LOW);
@@ -111,16 +111,14 @@ void backward(int power)
 }
 
 void turnleft(int power) {
-  for (value = value; value <= power; value += 10)
-  {
+  for (value = value; value <= power; value += 10) {
     motor(value, LOW, 1, 0, 1, 0);
     delay(30);
   }
 }
 
 void turnright(int power) {
-  for (value = value; value <= power; value += 10)
-  {
+  for (value = value; value <= power; value += 10) {
     motor(LOW, value, 1, 0, 1, 0);
     delay(30);
   }
@@ -128,8 +126,7 @@ void turnright(int power) {
 
 ////// Break Motor ////////////
 
-void break_motor()
-{
+void break_motor() {
   motor(LOW, LOW, 0, 0, 0, 0);
 }
 

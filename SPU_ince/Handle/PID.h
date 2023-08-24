@@ -1,21 +1,28 @@
+#include <Arduino.h>
+#include <QTRSensors.h>
+
+#ifndef PID_h
 #define PID_h
 
-#include <Arduino.h>
-#ifndef motor_h
-#define motor_h
+#include "motor.h"
 
-const int BZ = 4;
+QTRSensors qtr;
+
+const uint8_t SensorCount = 8;
+uint16_t sensorValues[SensorCount];
+
+const int BZ1 = 4;
 
 // ตั้งค่าขาที่ใช้ในการควบคุม L298P Shield
-const int M1 = 10;  // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ A
-const int MA1 = 12; // ให้มอเตอร์หมุนไปด้านหน้า
-const int MA2 = 3;  // ให้มอเตอร์หมุนไปด้านหลัง
+const int M1_1 = 10;  // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ A
+const int MA1_1 = 12; // ให้มอเตอร์หมุนไปด้านหน้า
+const int MA2_2 = 3;  // ให้มอเตอร์หมุนไปด้านหลัง
 
-const int M2 = 11;  // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ B
-const int MB1 = 13; // ให้มอเตอร์หมุนไปด้านหน้า
-const int MB2 = 8;  // ให้มอเตอร์หมุนไปด้านหลัง
+const int M2_2 = 11;  // ขาที่ใช้ในการควบคุมความเร็วมอเตอร์ B
+const int MB1_1 = 13; // ให้มอเตอร์หมุนไปด้านหน้า
+const int MB2_2 = 8;  // ให้มอเตอร์หมุนไปด้านหลัง
 
-int[] sensorsValue = new int[7]; // do not use 0 index
+int* sensorsValue = new int[7]; // do not use 0 index
 
 int lineV = 0;
 int groundV = 0;
@@ -37,42 +44,38 @@ int Kp = 1.0;
 int Kd = 0.03;
 int Ki = 0.1;
 
-void motor(int PWA, int PWB, int MAA1, int MAA2, int MBB1, int MBB2) {
-  analogWrite(M1, PWA);
-  analogWrite(M2, PWB);
+void motor2(int PWA1, int PWB1, int MAA1_1, int MAA2_2, int MBB2_1, int MBB2_2) {
+  analogWrite(M1_1, PWA1);
+  analogWrite(M2_2, PWB1);
 
-  digitalWrite(MA1, MAA1);
-  digitalWrite(MB1, MBB1);
-  digitalWrite(MA2, MAA2);
-  digitalWrite(MB2, MBB2);
+  digitalWrite(MA1_1, MAA1_1);
+  digitalWrite(MB1_1, MBB2_1);
+  digitalWrite(MA2_2, MAA2_2);
+  digitalWrite(MB2_2, MBB2_2);
 }
 
 bool B(int n) {
-  if (n > 980)
-  { // is black
+  if (n > 980) { // is black
     return true;
   }
-  else
-  {
+  else {
     return false;
   }
 }
 
 bool W(int n) {
-  if (n <= 979)
-  { // is white
+  if (n <= 979) { // is white
     return true;
   }
-  else
-  {
+  else {
     return false;
   }
 }
 
 void Tl() {
 
-  for (int i = 0; i < N; i++)   {
-    sensorsValue[i] = analog(i);
+  for (int i = 0; i < N; i++) {
+    sensorsValue[i] = analogRead(i);
   }
 
   if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && B(sensorsValue[7])) {
@@ -105,9 +108,9 @@ void Tl() {
   else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = 0;
   }
-  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(WsensorsValue[5]) &&W(sensorsValue[6]) &&W(sensorsValue[7])) {
+  else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
       error = 0;
-    }
+  }
   else if (B(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -4;
   }
@@ -129,7 +132,7 @@ void Tl() {
   else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -1;
     /// check WWWWW
-    else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4])) {
+    if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4])) {
       error = pre_error;
     }
 
@@ -137,17 +140,20 @@ void Tl() {
     leftSpeed = baseSpeed + motorSpeed;
     rightSpeed = baseSpeed - motorSpeed;
 
-    if (leftSpeed > maxSpeed)
+    if (leftSpeed > maxSpeed) {
       leftSpeed = maxSpeed;
-    if (rightSpeed > maxSpeed)
+    }
+    if (rightSpeed > maxSpeed) { 
       rightSpeed = maxSpeed;
-
-    if (leftSpeed < -maxSpeed)
+    }
+    if (leftSpeed < -maxSpeed) {
       leftSpeed = -maxSpeed;
-    if (rightSpeed < -maxSpeed)
+    }
+    if (rightSpeed < -maxSpeed) {
       rightSpeed = -maxSpeed;
-
-    motor(leftSpeed, rightSpeed, 1, 0, 1, 0);
+    }
+      
+    motor2(leftSpeed, rightSpeed, 1, 0, 1, 0);
 
     pre_error = error;
     sum_error += error;
@@ -169,6 +175,34 @@ void sensor_test() {
   Serial.println(position);
 
   delay(250);
+}
+
+void callibrated() {
+  // 2.5 ms RC หมดเวลาอ่าน (ค่าเริ่มต้น) * 10 อ่านต่อ calibrate() โทร
+  // = ~25 ms ต่อการโทร calibrate()
+  // โทร calibrate() 400 ครั้งเพื่อให้การสอบเทียบใช้เวลาประมาณ 10 วินาที
+  for (uint16_t i = 0; i < 400; i++) {
+    qtr.calibrate();
+  }
+  digitalWrite(LED_BUILTIN, LOW);  // turn off Arduino's LED to indicate we are through with calibration
+
+  // พิมพ์ค่าต่ำสุดของการสอบเทียบที่วัดได้เมื่อเปิดอิมิตเตอร์
+  Serial.begin(9600);
+  for (uint8_t i = 0; i < SensorCount; i++) {
+    Serial.print(qtr.calibrationOn.minimum[i]);
+    Serial.print(' ');
+  }
+  Serial.println();
+
+  // พิมพ์ค่าสูงสุดของการสอบเทียบที่วัดได้เมื่อเปิดอิมิตเตอร์
+  for (uint8_t i = 0; i < SensorCount; i++) {
+    Serial.print(qtr.calibrationOn.maximum[i]);
+    Serial.print(' ');
+  }
+  Serial.println();
+  Serial.println();
+
+  delay(1000);
 }
 
 #endif

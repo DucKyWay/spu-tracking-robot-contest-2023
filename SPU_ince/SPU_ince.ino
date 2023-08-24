@@ -1,5 +1,5 @@
 #include "Handle/PID.h"
-
+#include "Handle/motor.h"
 #include <QTRSensors.h>
 #include <EEPROM.h>
 QTRSensors qtr;
@@ -24,60 +24,7 @@ const uint16_t DesiredPosition = SensorCount * 1000 / 2;  // assuming each senso
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-bool loadCalibrationFromEEPROM() {
-  for (uint8_t i = 0; i < SensorCount; i++) {
-    EEPROM.get(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]);
-    EEPROM.get((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i]);
-    Serial.println(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]);
-    Serial.println((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i]);
 
-    // ถ้าเกิดว่าในตัว รอมใน อาดูโน้ว ไม่มีข้อมูลค่าที่ คอลลิเบรต เอาไว้ให้หยุด แล้วไป คอลลิเบรตใหม่
-    if ((EEPROM.get(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]) == NULL) || (EEPROM.get((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i])) == NULL) {
-      return 0;
-      break;
-    }
-  }
-  return true;
-}
-
-void saveCalibrationToEEPROM() {
-  for (uint8_t i = 0; i < SensorCount; i++) {
-    EEPROM.put(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]);
-    EEPROM.put((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i]);
-    Serial.println(i * sizeof(uint16_t), qtr.calibrationOn.minimum[i]);
-    Serial.println((SensorCount + i) * sizeof(uint16_t), qtr.calibrationOn.maximum[i]);
-  }
-}
-
-void callibrated() {
-  // 2.5 ms RC หมดเวลาอ่าน (ค่าเริ่มต้น) * 10 อ่านต่อ calibrate() โทร
-  // = ~25 ms ต่อการโทร calibrate()
-  // โทร calibrate() 400 ครั้งเพื่อให้การสอบเทียบใช้เวลาประมาณ 10 วินาที
-  for (uint16_t i = 0; i < 400; i++) {
-    qtr.calibrate();
-  }
-  digitalWrite(LED_BUILTIN, LOW);  // turn off Arduino's LED to indicate we are through with calibration
-
-  // พิมพ์ค่าต่ำสุดของการสอบเทียบที่วัดได้เมื่อเปิดอิมิตเตอร์
-  Serial.begin(9600);
-  for (uint8_t i = 0; i < SensorCount; i++) {
-    Serial.print(qtr.calibrationOn.minimum[i]);
-    Serial.print(' ');
-  }
-  Serial.println();
-
-  // พิมพ์ค่าสูงสุดของการสอบเทียบที่วัดได้เมื่อเปิดอิมิตเตอร์
-  for (uint8_t i = 0; i < SensorCount; i++) {
-    Serial.print(qtr.calibrationOn.maximum[i]);
-    Serial.print(' ');
-  }
-  Serial.println();
-  Serial.println();
-
-  saveCalibrationToEEPROM();
-
-  delay(1000);
-}
 
 void setup() {
   pinMode(7, OUTPUT);
