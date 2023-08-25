@@ -137,7 +137,7 @@ void Tl() {
   } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
     error = -1;
     /// check WWWWW
-    if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4])) {
+    if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]))&& W(sensorsValue[4])&& W(sensorsValue[5]&& W(sensorsValue[6])&& W(sensorsValue[7])) {
       error = pre_error;
     }
 
