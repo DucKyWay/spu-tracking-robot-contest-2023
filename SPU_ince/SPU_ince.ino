@@ -188,14 +188,14 @@ void sensor_test() {
 
 void callibrated() {
   // 2.5 ms RC หมดเวลาอ่าน (ค่าเริ่มต้น) * 10 อ่านต่อ calibrate() โทร
-  // = ~25 ms ต่อการโทร calibrate()
-  // โทร calibrate() 400 ครั้งเพื่อให้การสอบเทียบใช้เวลาประมาณ 10 วินาที
+  // = ~25 ms / calibrate() 1 ครั้ง
+  // เรียก calibrate() 400 ครั้ง ใช้เวลาประมาณ 10 วินาที
   for (uint16_t i = 0; i < 400; i++) {
     qtr.calibrate();
   }
   digitalWrite(LED_BUILTIN, LOW);  // turn off Arduino's LED to indicate we are through with calibration
 
-  // พิมพ์ค่าต่ำสุดของการสอบเทียบที่วัดได้เมื่อเปิดอิมิตเตอร์
+  // พิมพ์ค่าต่ำสุดของที่วัดได้เมื่อเปิด calibrate
   Serial.begin(9600);
   for (uint8_t i = 0; i < SensorCount; i++) {
     Serial.print(qtr.calibrationOn.minimum[i]);
@@ -203,13 +203,29 @@ void callibrated() {
   }
   Serial.println();
 
-  // พิมพ์ค่าสูงสุดของการสอบเทียบที่วัดได้เมื่อเปิดอิมิตเตอร์
+  // พิมพ์ค่าสูงสุดของที่วัดได้เมื่อเปิด calibrate
   for (uint8_t i = 0; i < SensorCount; i++) {
     Serial.print(qtr.calibrationOn.maximum[i]);
     Serial.print(' ');
   }
   Serial.println();
   Serial.println();
+
+  delay(1000);
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+void calibrate(int i) {
+
+  Serial.println("Working in calibrate().");
+  Serial.begin(9600);
+  if(0 <= i <= 100) {
+    Serial.println("Calibrate White");
+  }
+  else if(101 <= i <= 200) { 
+    Serial.println("Calibrate Black");
+  }
 
   delay(1000);
 }
@@ -233,7 +249,8 @@ void setup() {
       5, 3, A5, A4, A3, A2, A1, A0 },
     SensorCount);
   qtr.setEmitterPin(2);
-  Beep();
+  Serial.println("Beep");
+  // Beep();
 
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
@@ -244,13 +261,12 @@ void setup() {
   //   callibrated();  // Call the calibration function if loading fails
   // }
   callibrated();
-  Beep();
+  Serial.println("Beep beep");
+  // Beep();
 }
 
 bool ch = true;
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
 void loop() {
