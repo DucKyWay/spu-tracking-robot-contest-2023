@@ -223,7 +223,7 @@ void setup() {
   digitalWrite(7, HIGH);
   //Setup Channel A
 
-  pinMode(9, INPUT);
+  pinMode(bt, INPUT);
 
   pinMode(4, OUTPUT);
   // configure the sensors
@@ -258,13 +258,13 @@ void loop() {
     ch = true;
 
     for (int i = 0 ; i <= 100 ; i++ ) {
-      calibrate(i);
+      calibrate(i); //calibrate white
     }
     for (int i = 101 ; i <= 200 ; i++ ) {
-      calibrate(i);
+      calibrate(i); //calibrate black line
     }
   }
-  
+
   if (ch == false) {
     sensor_test();
   } else {
