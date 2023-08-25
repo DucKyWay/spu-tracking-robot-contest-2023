@@ -32,7 +32,7 @@ const int M2_2 = 11;   // ขาที่ใช้ในการควบคุ
 const int MB1_1 = 13;  // ให้มอเตอร์หมุนไปด้านหน้า
 const int MB2_2 = 8;   // ให้มอเตอร์หมุนไปด้านหลัง
 
-int* sensorValues = new int[7];  // do not use 0 index
+
 
 int lineV = 0;
 int groundV = 0;
@@ -137,7 +137,7 @@ void Tl() {
   } else if (B(sensorValues[0]) && B(sensorValues[1]) && W(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && W(sensorValues[7])) {
     error = -1;
     /// check WWWWW
-    if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]))&& W(sensorValues[4])&& W(sensorValues[5]&& W(sensorValues[6])&& W(sensorValues[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6])&& W(sensorValues[7])) {
       error = pre_error;
     }
 
@@ -163,7 +163,6 @@ void Tl() {
     pre_error = error;
     sum_error += error;
   }
-}
 
 /////////////////////////////////////////////////////////////////////////
 
