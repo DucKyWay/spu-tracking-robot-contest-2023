@@ -10,8 +10,6 @@ QTRSensors qtr;
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-int bt = 9;
-
 const uint8_t SensorCount = 8;
 
 uint16_t sensorValues[SensorCount];
@@ -40,7 +38,7 @@ int meanV = 500;
 int N = 5;
 
 int motorSpeed;
-int baseSpeed = 100;
+int baseSpeed = 50;
 
 int rightSpeed, leftSpeed;
 int maxSpeed = 100;
@@ -51,8 +49,8 @@ int sum_error = 0;
 int error = 0;
 int pre_error = 0;
 int Kp = 1.0;
-int Kd = 0.03;
-int Ki = 0.1;
+int Kd = 0.01;
+int Ki = 0.5;
 
 // Desired position should be the center of your sensors.
 const uint16_t DesiredPosition = SensorCount * 1000 / 2;  // assuming each sensor can have a max value of 1000
@@ -61,18 +59,15 @@ const uint16_t DesiredPosition = SensorCount * 1000 / 2;  // assuming each senso
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-void motor2(int PWA1, int PWB1, int MAA1_1, int MAA2_2, int MBB2_1, int MBB2_2) {
-  analogWrite(M1_1, PWA1);
-  analogWrite(M2_2, PWB1);
+// void motor2(int PWA1, int PWB1, int MAA1_1, int MAA2_2, int MBB2_1, int MBB2_2) {
+//   analogWrite(M1_1, PWA1);
+//   analogWrite(M2_2, PWB1);
 
-  digitalWrite(MA1_1, MAA1_1);
-  digitalWrite(MB1_1, MBB2_1);
-  digitalWrite(MA2_2, MAA2_2);
-  digitalWrite(MB2_2, MBB2_2);
-}
-
-/////////////////////////////////////////////////////////////////////////
-
+//   digitalWrite(MA1_1, MAA1_1);
+//   digitalWrite(MB1_1, MBB2_1);
+//   digitalWrite(MA2_2, MAA2_2);
+//   digitalWrite(MB2_2, MBB2_2);
+// }
 bool B(int n) {
   if (n > 980) {  // is black
     return true;
@@ -90,17 +85,30 @@ bool W(int n) {
     return false;
   }
 }
+/////////////////////////////////////////////////////////////////////////
+
 
 
 /////////////////////////////////////////////////////////////////////////
 
-void Tl() {
+/////////////////////////////////////////////////////////////////////////
 
-  for (int i = 0; i < N; i++) {
-    sensorValues[i] = analogRead(i);
+void sensor_test() {
+  // อ่านค่าเซ็นเซอร์ที่ปรับเทียบแล้วและรับการวัดตำแหน่งเส้น
+  // ตั้งแต่ 0 ถึง 5,000 (สำหรับเส้นสีขาว ให้ใช้ readLineWhite() แทน)
+  uint16_t position = qtr.readLineBlack(sensorValues);
+
+  // พิมพ์ค่าเซ็นเซอร์เป็นตัวเลขตั้งแต่ 0 - 1,000 โดยที่ 0 หมายถึงสูงสุด
+  // การสะท้อนแสง และ 1,000 หมายถึงการสะท้อนแสงขั้นต่ำ ตามด้วยเส้น
+  // ตำแหน่ง
+  for (uint8_t i = 0; i < SensorCount; i++) {
+    Serial.print(sensorValues[i]);
+    Serial.print('\t');
   }
+  Serial.println(position);
+  delay(250);
 
-  if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && B(sensorValues[7])) {
+   if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && B(sensorValues[7])) {
     error = 4;
   } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 4;
@@ -158,29 +166,21 @@ void Tl() {
       rightSpeed = -maxSpeed;
     }
 
-    motor2(leftSpeed, rightSpeed, 1, 0, 1, 0);
+    // motor(rightSpeed, leftSpeed, 1, LOW, 1, LOW);
+    // delay(30);
 
+    motor(90, 90, 1, LOW, 1, LOW);
+    delay(2000);
+    motor(90, 10, 1, LOW, 1, LOW);
+    delay(2000);
+    motor(90, 60, 1, LOW, 1, LOW);
+    delay(2000);
+
+    Serial.print(leftSpeed);
+    Serial.print("  ");
+    Serial.println(rightSpeed);
     pre_error = error;
     sum_error += error;
-  }
-
-/////////////////////////////////////////////////////////////////////////
-
-void sensor_test() {
-  // อ่านค่าเซ็นเซอร์ที่ปรับเทียบแล้วและรับการวัดตำแหน่งเส้น
-  // ตั้งแต่ 0 ถึง 5,000 (สำหรับเส้นสีขาว ให้ใช้ readLineWhite() แทน)
-  uint16_t position = qtr.readLineBlack(sensorValues);
-
-  // พิมพ์ค่าเซ็นเซอร์เป็นตัวเลขตั้งแต่ 0 - 1,000 โดยที่ 0 หมายถึงสูงสุด
-  // การสะท้อนแสง และ 1,000 หมายถึงการสะท้อนแสงขั้นต่ำ ตามด้วยเส้น
-  // ตำแหน่ง
-  for (uint8_t i = 0; i < SensorCount; i++) {
-    Serial.print(sensorValues[i]);
-    Serial.print('\t');
-  }
-  Serial.println(position);
-
-  delay(250);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -238,7 +238,7 @@ void setup() {
   digitalWrite(7, HIGH);
   //Setup Channel A
 
-  pinMode(bt, INPUT);
+  pinMode(9, INPUT);
 
   pinMode(4, OUTPUT);
   // configure the sensors
@@ -248,8 +248,8 @@ void setup() {
       5, 3, A5, A4, A3, A2, A1, A0 },
     SensorCount);
   qtr.setEmitterPin(2);
-  Serial.println("Beep");
-  // Beep();
+  Serial.println("Start Calibrate");
+  Beep();
 
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
@@ -260,33 +260,30 @@ void setup() {
   //   callibrated();  // Call the calibration function if loading fails
   // }
   callibrated();
-  Serial.println("Beep beep");
-  // Beep();
+  Serial.println("Stop Calibrated");
+  Beep();
 }
 
-bool ch = true;
+bool ch = false;
 
 /////////////////////////////////////////////////////////////////////////
 
 void loop() {
-  if (digitalRead(bt) == 1) {
-    ch = true;
+  // if (digitalRead9t) == 1) {
+  //   ch = true;
 
-    for (int i = 0 ; i <= 100 ; i++ ) {
-      calibrate(i); //calibrate white
-    }
-    for (int i = 101 ; i <= 200 ; i++ ) {
-      calibrate(i); //calibrate black line
-    }
-  }
+  //   for (int i = 0 ; i <= 100 ; i++ ) {
+  //     calibrate(i); //calibrate white
+  //   }
+  //   for (int i = 101 ; i <= 200 ; i++ ) {
+  //     calibrate(i); //calibrate black line
+  //   }
+  // }
 
   if (ch == false) {
     sensor_test();
   } else {
     uint16_t position = qtr.readLineBlack(sensorValues);  //อ่านค่าเส้นสีดำให้เป็นเส้นที่ถูกตรวจสอบเป็นหลัก
-
-    Tl();
-
     Error = 3500 - position;  // 3500 is the center position for an 8 sensor array
     Integral += Error;
     Derivative = Error - LastError;
