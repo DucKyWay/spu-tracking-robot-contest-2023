@@ -10,7 +10,7 @@ Reposiroty for SPU Tracking Robot Contest 2023 Project
 - [x] 🛣 PID and QTRsensors learning
 - [x] 🚗 Make Robot car with 3d printer
 - [x] 💻 Test coding in our robot car
-- [ ] ♨️ Hot Run Test on line tracking
+- [X] ♨️ Hot Run Test on line tracking
 - [ ] 🐎 Hot Final race
 - [ ] 🧸 If match 1 is win , we will get 20 point by BowBear
 <br>
