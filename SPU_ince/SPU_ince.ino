@@ -32,7 +32,7 @@ const int M2_2 = 11;   // ขาที่ใช้ในการควบคุ
 const int MB1_1 = 13;  // ให้มอเตอร์หมุนไปด้านหน้า
 const int MB2_2 = 8;   // ให้มอเตอร์หมุนไปด้านหลัง
 
-int* sensorsValue = new int[7];  // do not use 0 index
+int* sensorValues = new int[7];  // do not use 0 index
 
 int lineV = 0;
 int groundV = 0;
@@ -97,47 +97,47 @@ bool W(int n) {
 void Tl() {
 
   for (int i = 0; i < N; i++) {
-    sensorsValue[i] = analogRead(i);
+    sensorValues[i] = analogRead(i);
   }
 
-  if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && B(sensorsValue[7])) {
+  if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && B(sensorValues[7])) {
     error = 4;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 4;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 3;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 3;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 2;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && B(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 2;
-  } else if (W(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && B(sensorValues[1]) && B(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 1;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && B(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && B(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && B(sensorValues[7])) {
     error = 0;
-  } else if (W(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && B(sensorValues[1]) && B(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && W(sensorValues[7])) {
     error = 0;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && B(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = 0;
-  } else if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = 0;
-  } else if (B(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = -4;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = -4;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && B(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = -3;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && B(sensorsValue[2]) && B(sensorsValue[3]) && W(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && B(sensorValues[2]) && B(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = -3;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && W(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && W(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = -2;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && W(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && W(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && W(sensorValues[6]) && W(sensorValues[7])) {
     error = -2;
-  } else if (B(sensorsValue[0]) && B(sensorsValue[1]) && W(sensorsValue[2]) && B(sensorsValue[3]) && B(sensorsValue[4]) && B(sensorsValue[5]) && B(sensorsValue[6]) && W(sensorsValue[7])) {
+  } else if (B(sensorValues[0]) && B(sensorValues[1]) && W(sensorValues[2]) && B(sensorValues[3]) && B(sensorValues[4]) && B(sensorValues[5]) && B(sensorValues[6]) && W(sensorValues[7])) {
     error = -1;
     /// check WWWWW
-    if (W(sensorsValue[0]) && W(sensorsValue[1]) && W(sensorsValue[2]) && W(sensorsValue[3]) && W(sensorsValue[4]))&& W(sensorsValue[4])&& W(sensorsValue[5]&& W(sensorsValue[6])&& W(sensorsValue[7])) {
+    if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]))&& W(sensorValues[4])&& W(sensorValues[5]&& W(sensorValues[6])&& W(sensorValues[7])) {
       error = pre_error;
     }
 
