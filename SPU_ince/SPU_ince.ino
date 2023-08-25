@@ -10,6 +10,8 @@ QTRSensors qtr;
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
+int bt = 9;
+
 const uint8_t SensorCount = 8;
 
 uint16_t sensorValues[SensorCount];
@@ -252,9 +254,17 @@ bool ch = true;
 /////////////////////////////////////////////////////////////////////////
 
 void loop() {
-  if (digitalRead(9) == 1) {
+  if (digitalRead(bt) == 1) {
     ch = true;
+
+    for (int i = 0 ; i <= 100 ; i++ ) {
+      calibrate(i);
+    }
+    for (int i = 101 ; i <= 200 ; i++ ) {
+      calibrate(i);
+    }
   }
+  
   if (ch == false) {
     sensor_test();
   } else {
