@@ -157,33 +157,26 @@ void sensor_test() {
 
     if (leftSpeed > maxSpeed) {
       leftSpeed = maxSpeed;
-      motor(rightSpeed, leftSpeed, 1, LOW, 1, LOW);
-      delay(30);
     }
     if (rightSpeed > maxSpeed) {
       rightSpeed = maxSpeed;
-      motor(rightSpeed, leftSpeed, 1, LOW, 1, LOW);
-      delay(30);
     }
     if (leftSpeed < -maxSpeed) {
       leftSpeed = -maxSpeed;
-      motor(rightSpeed, leftSpeed, 1, LOW, 1, LOW);
-      delay(30);
     }
     if (rightSpeed < -maxSpeed) {
       rightSpeed = -maxSpeed;
-      motor(rightSpeed, leftSpeed, 1, LOW, 1, LOW);
-      delay(30);
     }
 
-    
+    // motor(rightSpeed, leftSpeed, 1, LOW, 1, LOW);
+    // delay(30);
 
-    // motor(90, 90, 1, LOW, 1, LOW);
-    // delay(2000);
-    // motor(90, 10, 1, LOW, 1, LOW);
-    // delay(2000);
-    // motor(90, 60, 1, LOW, 1, LOW);
-    // delay(2000);
+    motor(90, 90, 1, LOW, 1, LOW);
+    delay(2000);
+    motor(90, 10, 1, LOW, 1, LOW);
+    delay(2000);
+    motor(90, 60, 1, LOW, 1, LOW);
+    delay(2000);
 
     Serial.print(leftSpeed);
     Serial.print("  ");
