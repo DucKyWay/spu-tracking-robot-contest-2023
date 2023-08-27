@@ -69,7 +69,7 @@ const uint16_t DesiredPosition = SensorCount * 1000 / 2;  // assuming each senso
 //   digitalWrite(MB2_2, MBB2_2);
 // }
 bool B(int n) {
-  if (n > 980) {  // is black
+  if (n > 900) {  // is black
     return true;
   } else {
     return false;
@@ -79,7 +79,7 @@ bool B(int n) {
 /////////////////////////////////////////////////////////////////////////
 
 bool W(int n) {
-  if (n <= 979) {  // is white
+  if (n <= 899) {  // is white
     return true;
   } else {
     return false;
@@ -106,7 +106,7 @@ void sensor_test() {
     Serial.print('\t');
   }
   Serial.println(position);
-  delay(250);
+  delay(10);
 
    if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6]) && B(sensorValues[7])) {
     error = 4;
@@ -148,6 +148,8 @@ void sensor_test() {
   } else if (W(sensorValues[0]) && W(sensorValues[1]) && W(sensorValues[2]) && W(sensorValues[3]) && W(sensorValues[4]) && W(sensorValues[5]) && W(sensorValues[6])&& W(sensorValues[7])) {
       error = pre_error;
     }
+
+    error += 3500 - position;
 
     motorSpeed = Kp * error + Kd * (error - pre_error) + Ki * (sum_error);
     leftSpeed = baseSpeed + motorSpeed;
